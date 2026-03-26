@@ -22,6 +22,9 @@ type CompletionRequest struct {
 	// StreamingFunc is a function to be called for each chunk of a streaming response.
 	// Return an error to stop streaming early.
 	StreamingFunc func(ctx context.Context, chunk []byte) error `json:"-"`
+
+	// AdditionalFields allows you to specify additional fields for compatibility with other OpenAI-compatible providers.
+	AdditionalFields map[string]any `json:"-"`
 }
 
 type CompletionResponse struct {
@@ -89,5 +92,6 @@ func (c *Client) createCompletion(ctx context.Context, payload *CompletionReques
 		PresencePenalty:     payload.PresencePenalty,
 		StreamingFunc:       payload.StreamingFunc,
 		Seed:                payload.Seed,
+		AdditionalFields:    payload.AdditionalFields,
 	})
 }

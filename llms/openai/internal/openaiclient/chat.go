@@ -87,6 +87,9 @@ type ChatRequest struct {
 	// WebSearchOptions configures web search behavior for search-enabled models
 	// like gpt-4o-search-preview and gpt-4o-mini-search-preview.
 	WebSearchOptions *WebSearchOptions `json:"web_search_options,omitempty"`
+
+	// AdditionalFields allows you to specify additional fields for compatibility with other OpenAI-compatible providers.
+	AdditionalFields map[string]any `json:"-"`
 }
 
 // MarshalJSON ensures that only one of MaxTokens or MaxCompletionTokens is sent.
@@ -530,6 +533,25 @@ func (c *Client) createChat(ctx context.Context, payload *ChatRequest) (*ChatCom
 	payload.Metadata = originalMetadata
 	if err != nil {
 		return nil, err
+	}
+
+	if payload.AdditionalFields != nil {
+		payloadBytes, err = json.Marshal(payload)
+		if err != nil {
+			return nil, err
+		}
+		var payloadMap map[string]any
+		err = json.Unmarshal(payloadBytes, &payloadMap)
+		if err != nil {
+			return nil, err
+		}
+		for k, v := range payload.AdditionalFields {
+			payloadMap[k] = v
+		}
+		payloadBytes, err = json.Marshal(payloadMap)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	// Build request

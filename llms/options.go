@@ -73,6 +73,9 @@ type CallOptions struct {
 	// WebSearchOptions configures web search behavior for models that support it.
 	// Currently supported by OpenAI models like gpt-4o-search-preview.
 	WebSearchOptions *WebSearchOptions `json:"web_search_options,omitempty"`
+
+	// AdditionalFields allows you to specify additional fields for compatibility with other OpenAI-compatible providers.
+	AdditionalFields map[string]any `json:"-"`
 }
 
 // Tool is a tool that can be used by the model.
