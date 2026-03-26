@@ -324,6 +324,13 @@ func WithMetadata(metadata map[string]interface{}) CallOption {
 	}
 }
 
+// WithAdditionalFields will add an option to set additional fields for compatibility with other OpenAI-compatible providers.
+func WithAdditionalFields(fields map[string]any) CallOption {
+	return func(o *CallOptions) {
+		o.AdditionalFields = fields
+	}
+}
+
 // WithResponseMIMEType will add an option to set the ResponseMIMEType.
 // Provider support varies - check your provider's documentation.
 func WithResponseMIMEType(responseMIMEType string) CallOption {
