@@ -256,6 +256,15 @@ func (o *LLM) GenerateContent(ctx context.Context, messages []llms.MessageConten
 			apiMetadata[k] = v
 		}
 	}
+
+	// additional fields from opts.AdditionalFields
+	additionalFields := make(map[string]any)
+	if opts.AdditionalFields != nil {
+		for k, v := range opts.AdditionalFields {
+			additionalFields[k] = v
+		}
+	}
+
 	// Only include metadata if there are actual values to send
 	if len(apiMetadata) == 0 {
 		apiMetadata = nil
@@ -294,6 +303,7 @@ func (o *LLM) GenerateContent(ctx context.Context, messages []llms.MessageConten
 		Seed:                 opts.Seed,
 		Metadata:             apiMetadata,
 		WebSearchOptions:     webSearchOptionsFromCallOptions(opts.WebSearchOptions),
+		AdditionalFields:     additionalFields,
 	}
 	if opts.JSONMode {
 		req.ResponseFormat = ResponseFormatJSON
